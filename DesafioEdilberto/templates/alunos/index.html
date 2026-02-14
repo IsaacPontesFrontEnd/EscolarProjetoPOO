@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Alunos</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Alunos</h1>
+        
+        <a href="/alunos/create" class="btn btn-primary">Cadastrar Novo Aluno</a>
+        
+        <table id="tabelaAlunos">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Cidade</th>
+                    <th>CPF</th>
+                    <th>Email</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Função para carregar todos os alunos
+        function carregarAlunos() {
+            fetch('/api/alunos')
+                .then(response => response.json())
+                .then(alunos => {
+                    const tbody = document.querySelector('#tabelaAlunos tbody');
+                    tbody.innerHTML = '';
+                    
+                    alunos.forEach(aluno => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${aluno.id}</td>
+                            <td>${aluno.nome}</td>
+                            <td>${aluno.cidade}</td>
+                            <td>${aluno.cpf}</td>
+                            <td>${aluno.email}</td>
+                            <td>
+                                <a href="/alunos/${aluno.id}" class="btn btn-info">Ver</a>
+                                <a href="/alunos/${aluno.id}/edit" class="btn btn-warning">Editar</a>
+                                <button onclick="confirmarExclusao(${aluno.id})" class="btn btn-danger">Excluir</button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                });
+        }
+        
+        // Função para excluir aluno
+        function confirmarExclusao(id) {
+            if (confirm('Tem certeza que deseja excluir este aluno?')) {
+                fetch(`/api/alunos/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.mensagem);
+                    carregarAlunos();
+                });
+            }
+        }
+        
+        // Carregar alunos quando a página carregar
+        window.onload = carregarAlunos;
+    </script>
+</body>
+</html>
