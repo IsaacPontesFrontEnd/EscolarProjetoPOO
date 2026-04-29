@@ -6,13 +6,8 @@
 
 <style>
 *{box-sizing:border-box}
-
 body{
-  margin:0;
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  margin:0;height:100vh;display:flex;align-items:center;justify-content:center;
   font-family:Segoe UI, Arial;
   background:linear-gradient(135deg,#0f172a,#1e293b);
   color:#fff;
@@ -20,63 +15,70 @@ body{
 
 .menu{
   background:rgba(30,41,59,.9);
-  padding:40px;
-  border-radius:20px;
-  text-align:center;
+  padding:30px;border-radius:20px;text-align:center;
   box-shadow:0 20px 60px rgba(0,0,0,.7);
   width:320px;
 }
 
-h1{
-  margin-bottom:25px;
-}
-
 button{
-  width:100%;
-  padding:15px;
-  margin:10px 0;
-  border:none;
-  border-radius:12px;
-  font-size:18px;
-  font-weight:bold;
-  cursor:pointer;
-  transition:.2s;
+  width:100%;padding:14px;margin:8px 0;border:none;
+  border-radius:12px;font-size:16px;font-weight:bold;
+  cursor:pointer;transition:.2s;
 }
 
-.adicao{
-  background:#22c55e;
-  color:#000;
-}
+.adicao{background:#22c55e;color:#000}
+.subtracao{background:#ef4444;color:#fff}
+.voltar{background:#64748b;color:#fff}
 
-.subtracao{
-  background:#ef4444;
-  color:#fff;
-}
-
-button:hover{
-  transform:scale(1.05);
-  opacity:.9;
-}
+button:hover{transform:scale(1.05)}
+.hidden{display:none}
 </style>
 </head>
 
 <body>
 
 <div class="menu">
-  <h1>🧠 Escolha o Jogo</h1>
 
-  <button class="adicao" onclick="irPara('jogo_adicao.html')">
-    ➕ Jogo de Adição
-  </button>
+  <!-- ETAPA 1 -->
+  <div id="etapa1">
+    <h2>Escolha o modo</h2>
 
-  <button class="subtracao" onclick="irPara('jogo_subtracao.html')">
-    ➖ Jogo de Subtração
-  </button>
+    <button class="adicao" onclick="escolherModo('jogo_adicao.html')">
+      ➕ Adição
+    </button>
+
+    <button class="subtracao" onclick="escolherModo('jogo_subtracao.html')">
+      ➖ Subtração
+    </button>
+  </div>
+
+  <!-- ETAPA 2 -->
+  <div id="etapa2" class="hidden">
+    <h2>Modo de jogo</h2>
+
+    <button onclick="iniciar(true)">⏱️ Com tempo</button>
+    <button onclick="iniciar(false)">🧘 Sem tempo</button>
+    <button class="voltar" onclick="voltar()">⬅ Voltar</button>
+  </div>
+
 </div>
 
 <script>
-function irPara(pagina){
-  window.location.href = pagina;
+let jogoSelecionado = "";
+
+function escolherModo(jogo){
+  jogoSelecionado = jogo;
+  document.getElementById("etapa1").classList.add("hidden");
+  document.getElementById("etapa2").classList.remove("hidden");
+}
+
+function iniciar(comTempo){
+  window.location.href = jogoSelecionado + "?tempo=" + comTempo;
+}
+
+function voltar(){
+  document.getElementById("etapa2").classList.add("hidden");
+  document.getElementById("etapa1").classList.remove("hidden");
 }
 </script>
 
