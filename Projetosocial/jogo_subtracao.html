@@ -1,4 +1,3 @@
-<!-- SUBTRAÇÃO COM SUPORTE A TEMPO -->
 <script>
 const params = new URLSearchParams(window.location.search);
 const comTempo = params.get("tempo") === "true";
@@ -14,33 +13,44 @@ const upgrades=[
  {name:"🛡️ Escudo",effect:()=>shield=true}
 ];
 
+// 🔥 ELEMENTOS (isso tava faltando)
+const scoreEl=document.getElementById('score');
+const levelEl=document.getElementById('level');
+const streakEl=document.getElementById('streak');
+const livesEl=document.getElementById('lives');
+const answer=document.getElementById('answer');
+const feedback=document.getElementById('feedback');
+const question=document.getElementById('question');
+const timer=document.getElementById('timer');
+const game=document.getElementById('game');
+
 function generateQuestion(){
  let max=Math.floor(level*10*difficultyScale);
 
  let a=Math.floor(Math.random()*max);
  let b=Math.floor(Math.random()*max);
 
-if(a < b){ let t=a; a=b; b=t; }
+ if(a < b){ let t=a; a=b; b=t; }
 
-currentAnswer=a-b;
-question.textContent=`${a} - ${b}`;
+ currentAnswer=a-b;
+ question.textContent=`${a} - ${b}`;
  answer.value='';
  startTimer();
 }
 
 function startTimer(){
  if(!comTempo){
-   timer.style.display = "none";
+   timer.style.display="none";
    return;
  }
 
  if(isPaused) return;
  clearInterval(timerInterval);
+
  timeLeft=timeLimit;
  timer.style.width='100%';
 
  timerInterval=setInterval(()=>{
-   if(isPaused) return;
    timeLeft-=50;
    timer.style.width=(timeLeft/timeLimit*100)+'%';
 
@@ -91,13 +101,71 @@ function handleWrong(){
  if(shield){shield=false}
  else{
    lives--;
-   if(lives<=0){alert('Game Over');location.href='index.html';return}
+   if(lives<=0){
+     alert('Game Over');
+     location.href='index.html';
+     return;
+   }
  }
 
  feedback.textContent = streak>=5 ? '💥 COMBO QUEBRADO!' : 'Erro!';
  streak=0;
  feedback.className='feedback wrong';
+
  updateUI();
  generateQuestion();
 }
+
+function updateUI(){
+ scoreEl.textContent=score;
+ levelEl.textContent=level;
+ streakEl.textContent=streak;
+ livesEl.textContent=lives;
+
+ if(lives===1){game.classList.add('lowlife')}
+ else{game.classList.remove('lowlife')}
+}
+
+function showUpgrades(){
+ isPaused=true;
+ clearInterval(timerInterval);
+
+ let modal=document.getElementById('upgradeModal');
+ let choicesDiv=document.getElementById('choices');
+ choicesDiv.innerHTML='';
+
+ let pool=[...upgrades];
+
+ if(Math.random()<0.1){
+   pool.push({name:"💎 SUPER BONUS",effect:()=>scoreMultiplier+=1});
+ }
+
+ let selected=pool.sort(()=>0.5-Math.random()).slice(0,3);
+
+ selected.forEach(u=>{
+   let btn=document.createElement('div');
+   btn.className='choice';
+   btn.textContent=u.name;
+   btn.onclick=()=>{
+     u.effect();
+     modal.style.display='none';
+     isPaused=false;
+     updateUI();
+     generateQuestion();
+   };
+   choicesDiv.appendChild(btn);
+ });
+
+ modal.style.display='flex';
+}
+
+answer.addEventListener('keydown',e=>{
+ if(e.key==='Enter'){
+   e.preventDefault();
+   checkAnswer();
+ }
+});
+
+updateUI();
+generateQuestion();
 </script>
