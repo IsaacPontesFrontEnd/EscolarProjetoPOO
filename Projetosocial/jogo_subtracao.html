@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Adição Roguelite+</title>
+<title>Subtração Roguelite+</title>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Segoe UI,Arial;height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff}
@@ -11,17 +12,19 @@ body{margin:0;font-family:Segoe UI,Arial;height:100vh;display:flex;align-items:c
 .stats,.extra{display:flex;justify-content:space-between;margin-bottom:10px}
 .question{font-size:38px;margin:15px 0;font-weight:bold}
 input{width:100%;padding:12px;font-size:20px;border-radius:10px;border:none;text-align:center;background:#020617;color:#fff}
-button{margin-top:10px;width:100%;padding:12px;border:none;border-radius:10px;background:#22c55e;color:#000;font-weight:bold;cursor:pointer}
+button{margin-top:10px;width:100%;padding:12px;border:none;border-radius:10px;background:#ef4444;color:#fff;font-weight:bold;cursor:pointer}
 .feedback{height:20px;margin-top:8px}
 .correct{color:#4ade80}.wrong{color:#f87171}
 .modal{position:absolute;inset:0;background:rgba(0,0,0,.9);display:none;flex-direction:column;justify-content:center;align-items:center;border-radius:20px}
 .choice{margin:6px;padding:12px 20px;background:#4ade80;color:#000;border-radius:10px;cursor:pointer;font-weight:bold}
-.timer{height:6px;background:#22c55e;margin-bottom:10px;border-radius:5px}
+.timer{height:6px;background:#ef4444;margin-bottom:10px;border-radius:5px}
 </style>
 </head>
+
 <body>
 <div class="game" id="game">
-<h1>➕ Adição</h1>
+<h1>➖ Subtração</h1>
+
 <div class="timer" id="timer"></div>
 
 <div class="stats">
@@ -59,10 +62,19 @@ const upgrades=[
 
 function generateQuestion(){
  let max=Math.floor(level*10*difficultyScale);
+
  let a=Math.floor(Math.random()*max);
  let b=Math.floor(Math.random()*max);
- currentAnswer=a+b;
- question.textContent=`${a} + ${b}`;
+
+ // evita resultado negativo
+ if(a < b){
+   let temp = a;
+   a = b;
+   b = temp;
+ }
+
+ currentAnswer = a - b;
+ question.textContent = `${a} - ${b}`;
  answer.value='';
  startTimer();
 }
@@ -90,10 +102,7 @@ function dynamicScore(){
  let combo=streak*(2+comboBoost);
  let gained=(base+level+combo)*scoreMultiplier;
 
- // crítico
  if(Math.random()<0.1){gained*=2;feedback.textContent+=' ⚡CRÍTICO!';}
-
- // último segundo
  if(timeLeft<1000){gained+=10;}
 
  return Math.floor(gained);
@@ -146,7 +155,8 @@ function updateUI(){
  streakEl.textContent=streak;
  livesEl.textContent=lives;
 
- if(lives===1){game.classList.add('lowlife')} else{game.classList.remove('lowlife')}
+ if(lives===1){game.classList.add('lowlife')}
+ else{game.classList.remove('lowlife')}
 }
 
 function showUpgrades(){
@@ -158,7 +168,6 @@ function showUpgrades(){
 
  let pool=[...upgrades];
 
- // chance de upgrade raro
  if(Math.random()<0.1){
    pool.push({name:"💎 SUPER BONUS",effect:()=>scoreMultiplier+=1});
  }
@@ -192,7 +201,12 @@ const question=document.getElementById('question');
 const timer=document.getElementById('timer');
 const game=document.getElementById('game');
 
-answer.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();checkAnswer();}});
+answer.addEventListener('keydown',e=>{
+ if(e.key==='Enter'){
+   e.preventDefault();
+   checkAnswer();
+ }
+});
 
 updateUI();
 generateQuestion();

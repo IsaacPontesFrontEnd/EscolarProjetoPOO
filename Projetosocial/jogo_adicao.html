@@ -1,7 +1,9 @@
-<!DOCTYPE html><html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <title>Adição Roguelite+</title>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Segoe UI,Arial;height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff}
@@ -18,23 +20,35 @@ button{margin-top:10px;width:100%;padding:12px;border:none;border-radius:10px;ba
 .timer{height:6px;background:#22c55e;margin-bottom:10px;border-radius:5px}
 </style>
 </head>
+
 <body>
 <div class="game" id="game">
 <h1>➕ Adição</h1>
-<div class="timer" id="timer"></div><div class="stats">
+
+<div class="timer" id="timer"></div>
+
+<div class="stats">
 <div>⭐ <span id="score">0</span></div>
 <div>🏆 Lv <span id="level">1</span></div>
-</div><div class="extra">
+</div>
+
+<div class="extra">
 <div>🔥 <span id="streak">0</span></div>
 <div>❤️ <span id="lives">3</span></div>
-</div><div class="question" id="question"></div>
+</div>
+
+<div class="question" id="question"></div>
 <input type="number" id="answer">
 <button onclick="checkAnswer()">Responder</button>
-<div class="feedback" id="feedback"></div><div class="modal" id="upgradeModal">
+<div class="feedback" id="feedback"></div>
+
+<div class="modal" id="upgradeModal">
 <h3>Escolha um upgrade</h3>
 <div id="choices"></div>
 </div>
-</div><script>
+</div>
+
+<script>
 let score=0,level=1,streak=0,lives=3,currentAnswer=0;
 let scoreMultiplier=1,comboBoost=0,shield=false;
 let difficultyScale=1,timeLimit=5000,timerInterval,isPaused=false,timeLeft=0;
@@ -48,10 +62,12 @@ const upgrades=[
 
 function generateQuestion(){
  let max=Math.floor(level*10*difficultyScale);
+
  let a=Math.floor(Math.random()*max);
  let b=Math.floor(Math.random()*max);
- currentAnswer=a+b;
- question.textContent=`${a} + ${b}`;
+
+ currentAnswer = a + b;
+ question.textContent = `${a} + ${b}`;
  answer.value='';
  startTimer();
 }
@@ -79,10 +95,7 @@ function dynamicScore(){
  let combo=streak*(2+comboBoost);
  let gained=(base+level+combo)*scoreMultiplier;
 
- // crítico
  if(Math.random()<0.1){gained*=2;feedback.textContent+=' ⚡CRÍTICO!';}
-
- // último segundo
  if(timeLeft<1000){gained+=10;}
 
  return Math.floor(gained);
@@ -135,7 +148,8 @@ function updateUI(){
  streakEl.textContent=streak;
  livesEl.textContent=lives;
 
- if(lives===1){game.classList.add('lowlife')} else{game.classList.remove('lowlife')}
+ if(lives===1){game.classList.add('lowlife')}
+ else{game.classList.remove('lowlife')}
 }
 
 function showUpgrades(){
@@ -147,7 +161,6 @@ function showUpgrades(){
 
  let pool=[...upgrades];
 
- // chance de upgrade raro
  if(Math.random()<0.1){
    pool.push({name:"💎 SUPER BONUS",effect:()=>scoreMultiplier+=1});
  }
@@ -181,9 +194,15 @@ const question=document.getElementById('question');
 const timer=document.getElementById('timer');
 const game=document.getElementById('game');
 
-answer.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();checkAnswer();}});
+answer.addEventListener('keydown',e=>{
+ if(e.key==='Enter'){
+   e.preventDefault();
+   checkAnswer();
+ }
+});
 
 updateUI();
 generateQuestion();
-</script></body>
+</script>
+</body>
 </html>
