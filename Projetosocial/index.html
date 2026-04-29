@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Menu Inicial</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:Segoe UI, Arial;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:#fff;
+}
+
+.menu{
+  background:rgba(30,41,59,.9);
+  padding:40px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.7);
+  width:320px;
+}
+
+h1{
+  margin-bottom:25px;
+}
+
+button{
+  width:100%;
+  padding:15px;
+  margin:10px 0;
+  border:none;
+  border-radius:12px;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.adicao{
+  background:#22c55e;
+  color:#000;
+}
+
+.subtracao{
+  background:#ef4444;
+  color:#fff;
+}
+
+button:hover{
+  transform:scale(1.05);
+  opacity:.9;
+}
+</style>
+</head>
+
+<body>
+
+<div class="menu">
+  <h1>🧠 Escolha o Jogo</h1>
+
+  <button class="adicao" onclick="irPara('jogo_adicao.html')">
+    ➕ Jogo de Adição
+  </button>
+
+  <button class="subtracao" onclick="irPara('jogo_subtracao.html')">
+    ➖ Jogo de Subtração
+  </button>
+</div>
+
+<script>
+function irPara(pagina){
+  window.location.href = pagina;
+}
+</script>
+
+</body>
+</html>
