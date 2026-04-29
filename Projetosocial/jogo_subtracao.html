@@ -22,8 +22,10 @@ function generateQuestion(){
 
  if(a < b){ let t=a; a=b; b=t; }
 
- currentAnswer = a - b;
- question.textContent = `${a} - ${b}`;
+if(a < b){ let t=a; a=b; b=t; }
+
+currentAnswer=a-b;
+question.textContent=`${a} - ${b}`;
  answer.value='';
  startTimer();
 }

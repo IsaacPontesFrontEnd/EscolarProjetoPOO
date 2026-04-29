@@ -1,12 +1,63 @@
-<!-- ADIÇÃO COM SUPORTE A TEMPO -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Adição Roguelite+</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Arial;height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff}
+.game{position:relative;width:360px;padding:28px;border-radius:20px;background:rgba(30,41,59,.9);box-shadow:0 20px 60px rgba(0,0,0,.7);text-align:center}
+.lowlife{box-shadow:0 0 30px rgba(255,0,0,.6) inset}
+.stats,.extra{display:flex;justify-content:space-between;margin-bottom:10px}
+.question{font-size:38px;margin:15px 0;font-weight:bold}
+input{width:100%;padding:12px;font-size:20px;border-radius:10px;border:none;text-align:center;background:#020617;color:#fff}
+button{margin-top:10px;width:100%;padding:12px;border:none;border-radius:10px;background:#22c55e;color:#000;font-weight:bold;cursor:pointer}
+.feedback{height:20px;margin-top:8px}
+.correct{color:#4ade80}.wrong{color:#f87171}
+.modal{position:absolute;inset:0;background:rgba(0,0,0,.9);display:none;flex-direction:column;justify-content:center;align-items:center;border-radius:20px}
+.choice{margin:6px;padding:12px 20px;background:#4ade80;color:#000;border-radius:10px;cursor:pointer;font-weight:bold}
+.timer{height:6px;background:#22c55e;margin-bottom:10px;border-radius:5px}
+</style>
+</head>
+
+<body>
+<div class="game" id="game">
+<h1>➕ Adição</h1>
+<div class="timer" id="timer"></div>
+
+<div class="stats">
+<div>⭐ <span id="score">0</span></div>
+<div>🏆 Lv <span id="level">1</span></div>
+</div>
+
+<div class="extra">
+<div>🔥 <span id="streak">0</span></div>
+<div>❤️ <span id="lives">3</span></div>
+</div>
+
+<div class="question" id="question"></div>
+<input type="number" id="answer">
+<button onclick="checkAnswer()">Responder</button>
+<div class="feedback" id="feedback"></div>
+
+<div class="modal" id="upgradeModal">
+<h3>Escolha um upgrade</h3>
+<div id="choices"></div>
+</div>
+</div>
+
 <script>
+// 🔥 modo tempo
 const params = new URLSearchParams(window.location.search);
 const comTempo = params.get("tempo") === "true";
 
+// estado
 let score=0,level=1,streak=0,lives=3,currentAnswer=0;
 let scoreMultiplier=1,comboBoost=0,shield=false;
 let difficultyScale=1,timeLimit=5000,timerInterval,isPaused=false,timeLeft=0;
 
+// upgrades
 const upgrades=[
  {name:"💰 +50% pontos / -1 vida",effect:()=>{scoreMultiplier+=0.5;lives--}},
  {name:"❤️ +1 vida / -20% pontos",effect:()=>{lives++;scoreMultiplier-=0.2}},
@@ -14,30 +65,42 @@ const upgrades=[
  {name:"🛡️ Escudo",effect:()=>shield=true}
 ];
 
+// elementos
+const scoreEl=document.getElementById('score');
+const levelEl=document.getElementById('level');
+const streakEl=document.getElementById('streak');
+const livesEl=document.getElementById('lives');
+const answer=document.getElementById('answer');
+const feedback=document.getElementById('feedback');
+const question=document.getElementById('question');
+const timer=document.getElementById('timer');
+const game=document.getElementById('game');
+
+// lógica
 function generateQuestion(){
  let max=Math.floor(level*10*difficultyScale);
  let a=Math.floor(Math.random()*max);
  let b=Math.floor(Math.random()*max);
 
- currentAnswer = a + b;
- question.textContent = `${a} + ${b}`;
+ currentAnswer=a+b;
+ question.textContent=`${a} + ${b}`;
  answer.value='';
  startTimer();
 }
 
 function startTimer(){
  if(!comTempo){
-   timer.style.display = "none";
+   timer.style.display="none";
    return;
  }
 
  if(isPaused) return;
  clearInterval(timerInterval);
+
  timeLeft=timeLimit;
  timer.style.width='100%';
 
  timerInterval=setInterval(()=>{
-   if(isPaused) return;
    timeLeft-=50;
    timer.style.width=(timeLeft/timeLimit*100)+'%';
 
@@ -60,7 +123,6 @@ function dynamicScore(){
 }
 
 function checkAnswer(){
- if(isPaused) return;
  clearInterval(timerInterval);
  let val=Number(answer.value);
 
@@ -88,13 +150,73 @@ function handleWrong(){
  if(shield){shield=false}
  else{
    lives--;
-   if(lives<=0){alert('Game Over');location.href='index.html';return}
+   if(lives<=0){
+     alert('Game Over');
+     location.href='index.html';
+     return;
+   }
  }
 
  feedback.textContent = streak>=5 ? '💥 COMBO QUEBRADO!' : 'Erro!';
  streak=0;
  feedback.className='feedback wrong';
+
  updateUI();
  generateQuestion();
 }
+
+function updateUI(){
+ scoreEl.textContent=score;
+ levelEl.textContent=level;
+ streakEl.textContent=streak;
+ livesEl.textContent=lives;
+
+ if(lives===1){game.classList.add('lowlife')}
+ else{game.classList.remove('lowlife')}
+}
+
+function showUpgrades(){
+ isPaused=true;
+ clearInterval(timerInterval);
+
+ let modal=document.getElementById('upgradeModal');
+ let choicesDiv=document.getElementById('choices');
+ choicesDiv.innerHTML='';
+
+ let pool=[...upgrades];
+
+ if(Math.random()<0.1){
+   pool.push({name:"💎 SUPER BONUS",effect:()=>scoreMultiplier+=1});
+ }
+
+ let selected=pool.sort(()=>0.5-Math.random()).slice(0,3);
+
+ selected.forEach(u=>{
+   let btn=document.createElement('div');
+   btn.className='choice';
+   btn.textContent=u.name;
+   btn.onclick=()=>{
+     u.effect();
+     modal.style.display='none';
+     isPaused=false;
+     updateUI();
+     generateQuestion();
+   };
+   choicesDiv.appendChild(btn);
+ });
+
+ modal.style.display='flex';
+}
+
+answer.addEventListener('keydown',e=>{
+ if(e.key==='Enter'){
+   e.preventDefault();
+   checkAnswer();
+ }
+});
+
+updateUI();
+generateQuestion();
 </script>
+</body>
+</html>
