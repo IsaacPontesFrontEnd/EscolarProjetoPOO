@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizar Aluno</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Detalhes do Aluno</h1>
+        
+        <div id="loading" style="text-align: center; padding: 20px; font-size: 18px;">⏳ Carregando dados...</div>
+        
+        <div id="detalhesAluno" class="detalhes" style="display: none;">
+            <p><strong>ID:</strong> <span id="id"></span></p>
+            <p><strong>Nome:</strong> <span id="nome"></span></p>
+            <p><strong>Endereço:</strong> <span id="endereco"></span></p>
+            <p><strong>Cidade:</strong> <span id="cidade"></span></p>
+            <p><strong>País:</strong> <span id="pais"></span></p>
+            <p><strong>CPF:</strong> <span id="cpf"></span></p>
+            <p><strong>Email:</strong> <span id="email"></span></p>
+        </div>
+        
+        <a href="/" class="btn btn-secondary">Voltar</a>
+        <a href="#" onclick="editarAluno()" class="btn btn-warning">Editar</a>
+    </div>
+
+    <script>
+        // Pegar o ID da URL
+        const url = window.location.pathname;
+        const id = url.split('/')[2];
+        
+        // Função para carregar dados do aluno
+        function carregarAluno() {
+            fetch(`/api/alunos/${id}`)
+                .then(response => response.json())
+                .then(aluno => {
+                    console.log('Dados recebidos:', aluno);
+                    
+                    if (aluno) {
+                        // Esconder loading e mostrar dados
+                        document.getElementById('loading').style.display = 'none';
+                        document.getElementById('detalhesAluno').style.display = 'block';
+                        
+                        document.getElementById('id').textContent = aluno.id || '';
+                        document.getElementById('nome').textContent = aluno.nome || '';
+                        document.getElementById('endereco').textContent = aluno.endereco || '';
+                        document.getElementById('cidade').textContent = aluno.cidade || '';
+                        document.getElementById('pais').textContent = aluno.pais || '';
+                        document.getElementById('cpf').textContent = aluno.cpf || '';
+                        document.getElementById('email').textContent = aluno.email || '';
+                    } else {
+                        alert('Aluno não encontrado!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar aluno:', error);
+                    document.getElementById('loading').textContent = '❌ Erro ao carregar dados!';
+                });
+        }
+        
+        // Redirecionar para edição
+        function editarAluno() {
+            window.location.href = `/alunos/${id}/edit`;
+        }
+        
+        // Carregar aluno quando a página carregar
+        window.onload = carregarAluno;
+    </script>
+</body>
+</html>
