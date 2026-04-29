@@ -1,4 +1,6 @@
 <script>
+document.addEventListener("DOMContentLoaded", () => {
+
 const params = new URLSearchParams(window.location.search);
 const comTempo = params.get("tempo") === "true";
 
@@ -13,7 +15,7 @@ const upgrades=[
  {name:"🛡️ Escudo",effect:()=>shield=true}
 ];
 
-// 🔥 ELEMENTOS (isso tava faltando)
+// 🔥 agora isso funciona
 const scoreEl=document.getElementById('score');
 const levelEl=document.getElementById('level');
 const streakEl=document.getElementById('streak');
@@ -44,9 +46,7 @@ function startTimer(){
    return;
  }
 
- if(isPaused) return;
  clearInterval(timerInterval);
-
  timeLeft=timeLimit;
  timer.style.width='100%';
 
@@ -66,14 +66,13 @@ function dynamicScore(){
  let combo=streak*(2+comboBoost);
  let gained=(base+level+combo)*scoreMultiplier;
 
- if(Math.random()<0.1){gained*=2;feedback.textContent+=' ⚡CRÍTICO!';}
+ if(Math.random()<0.1){gained*=2;}
  if(comTempo && timeLeft<1000){gained+=10;}
 
  return Math.floor(gained);
 }
 
 function checkAnswer(){
- if(isPaused) return;
  clearInterval(timerInterval);
  let val=Number(answer.value);
 
@@ -108,7 +107,7 @@ function handleWrong(){
    }
  }
 
- feedback.textContent = streak>=5 ? '💥 COMBO QUEBRADO!' : 'Erro!';
+ feedback.textContent = 'Erro!';
  streak=0;
  feedback.className='feedback wrong';
 
@@ -134,13 +133,7 @@ function showUpgrades(){
  let choicesDiv=document.getElementById('choices');
  choicesDiv.innerHTML='';
 
- let pool=[...upgrades];
-
- if(Math.random()<0.1){
-   pool.push({name:"💎 SUPER BONUS",effect:()=>scoreMultiplier+=1});
- }
-
- let selected=pool.sort(()=>0.5-Math.random()).slice(0,3);
+ let selected=[...upgrades].sort(()=>0.5-Math.random()).slice(0,3);
 
  selected.forEach(u=>{
    let btn=document.createElement('div');
@@ -159,6 +152,7 @@ function showUpgrades(){
  modal.style.display='flex';
 }
 
+// 🔥 agora isso não quebra mais
 answer.addEventListener('keydown',e=>{
  if(e.key==='Enter'){
    e.preventDefault();
@@ -168,4 +162,6 @@ answer.addEventListener('keydown',e=>{
 
 updateUI();
 generateQuestion();
+
+});
 </script>
