@@ -1,13 +1,63 @@
-<script>
-document.addEventListener("DOMContentLoaded", () => {
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Subtração Roguelite+</title>
 
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Arial;height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff}
+.game{position:relative;width:360px;padding:28px;border-radius:20px;background:rgba(30,41,59,.9);box-shadow:0 20px 60px rgba(0,0,0,.7);text-align:center}
+.lowlife{box-shadow:0 0 30px rgba(255,0,0,.6) inset}
+.stats,.extra{display:flex;justify-content:space-between;margin-bottom:10px}
+.question{font-size:38px;margin:15px 0;font-weight:bold}
+input{width:100%;padding:12px;font-size:20px;border-radius:10px;border:none;text-align:center;background:#020617;color:#fff}
+button{margin-top:10px;width:100%;padding:12px;border:none;border-radius:10px;background:#ef4444;color:#fff;font-weight:bold;cursor:pointer}
+.feedback{height:20px;margin-top:8px}
+.correct{color:#4ade80}.wrong{color:#f87171}
+.modal{position:absolute;inset:0;background:rgba(0,0,0,.9);display:none;flex-direction:column;justify-content:center;align-items:center;border-radius:20px}
+.choice{margin:6px;padding:12px 20px;background:#4ade80;color:#000;border-radius:10px;cursor:pointer;font-weight:bold}
+.timer{height:6px;background:#ef4444;margin-bottom:10px;border-radius:5px}
+</style>
+</head>
+
+<body>
+<div class="game" id="game">
+<h1>➖ Subtração</h1>
+<div class="timer" id="timer"></div>
+
+<div class="stats">
+<div>⭐ <span id="score">0</span></div>
+<div>🏆 Lv <span id="level">1</span></div>
+</div>
+
+<div class="extra">
+<div>🔥 <span id="streak">0</span></div>
+<div>❤️ <span id="lives">3</span></div>
+</div>
+
+<div class="question" id="question"></div>
+<input type="number" id="answer">
+<button onclick="checkAnswer()">Responder</button>
+<div class="feedback" id="feedback"></div>
+
+<div class="modal" id="upgradeModal">
+<h3>Escolha um upgrade</h3>
+<div id="choices"></div>
+</div>
+</div>
+
+<script>
+// modo tempo
 const params = new URLSearchParams(window.location.search);
 const comTempo = params.get("tempo") === "true";
 
+// estado
 let score=0,level=1,streak=0,lives=3,currentAnswer=0;
 let scoreMultiplier=1,comboBoost=0,shield=false;
 let difficultyScale=1,timeLimit=5000,timerInterval,isPaused=false,timeLeft=0;
 
+// upgrades
 const upgrades=[
  {name:"💰 +50% pontos / -1 vida",effect:()=>{scoreMultiplier+=0.5;lives--}},
  {name:"❤️ +1 vida / -20% pontos",effect:()=>{lives++;scoreMultiplier-=0.2}},
@@ -15,7 +65,7 @@ const upgrades=[
  {name:"🛡️ Escudo",effect:()=>shield=true}
 ];
 
-// 🔥 agora isso funciona
+// elementos
 const scoreEl=document.getElementById('score');
 const levelEl=document.getElementById('level');
 const streakEl=document.getElementById('streak');
@@ -26,13 +76,19 @@ const question=document.getElementById('question');
 const timer=document.getElementById('timer');
 const game=document.getElementById('game');
 
+// lógica
 function generateQuestion(){
  let max=Math.floor(level*10*difficultyScale);
 
  let a=Math.floor(Math.random()*max);
  let b=Math.floor(Math.random()*max);
 
- if(a < b){ let t=a; a=b; b=t; }
+ // evita negativo
+ if(a < b){
+   let temp = a;
+   a = b;
+   b = temp;
+ }
 
  currentAnswer=a-b;
  question.textContent=`${a} - ${b}`;
@@ -46,7 +102,9 @@ function startTimer(){
    return;
  }
 
+ if(isPaused) return;
  clearInterval(timerInterval);
+
  timeLeft=timeLimit;
  timer.style.width='100%';
 
@@ -66,7 +124,7 @@ function dynamicScore(){
  let combo=streak*(2+comboBoost);
  let gained=(base+level+combo)*scoreMultiplier;
 
- if(Math.random()<0.1){gained*=2;}
+ if(Math.random()<0.1){gained*=2;feedback.textContent+=' ⚡CRÍTICO!';}
  if(comTempo && timeLeft<1000){gained+=10;}
 
  return Math.floor(gained);
@@ -107,7 +165,7 @@ function handleWrong(){
    }
  }
 
- feedback.textContent = 'Erro!';
+ feedback.textContent = streak>=5 ? '💥 COMBO QUEBRADO!' : 'Erro!';
  streak=0;
  feedback.className='feedback wrong';
 
@@ -133,7 +191,13 @@ function showUpgrades(){
  let choicesDiv=document.getElementById('choices');
  choicesDiv.innerHTML='';
 
- let selected=[...upgrades].sort(()=>0.5-Math.random()).slice(0,3);
+ let pool=[...upgrades];
+
+ if(Math.random()<0.1){
+   pool.push({name:"💎 SUPER BONUS",effect:()=>scoreMultiplier+=1});
+ }
+
+ let selected=pool.sort(()=>0.5-Math.random()).slice(0,3);
 
  selected.forEach(u=>{
    let btn=document.createElement('div');
@@ -152,7 +216,6 @@ function showUpgrades(){
  modal.style.display='flex';
 }
 
-// 🔥 agora isso não quebra mais
 answer.addEventListener('keydown',e=>{
  if(e.key==='Enter'){
    e.preventDefault();
@@ -162,6 +225,6 @@ answer.addEventListener('keydown',e=>{
 
 updateUI();
 generateQuestion();
-
-});
 </script>
+</body>
+</html>
