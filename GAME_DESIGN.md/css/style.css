@@ -1,0 +1,434 @@
+:root {
+  color-scheme: dark;
+  --bg: #070708;
+  --panel: rgba(18, 18, 20, 0.76);
+  --text: #ece7df;
+  --muted: #a59c92;
+  --blood: #8f1d24;
+  --blood-dark: #3a0b10;
+  --edge: rgba(236, 231, 223, 0.13);
+  --shadow: rgba(0, 0, 0, 0.7);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(143, 29, 36, 0.16), transparent 28rem),
+    linear-gradient(180deg, rgba(7, 7, 8, 0.66), var(--bg) 68%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 8px),
+    var(--bg);
+}
+
+button {
+  font: inherit;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.main-menu {
+  width: min(100%, 28rem);
+  padding: 3rem 2rem;
+  border: 1px solid var(--edge);
+  background: var(--panel);
+  box-shadow: 0 1.5rem 4rem var(--shadow);
+  text-align: center;
+}
+
+.main-menu__title {
+  margin: 0;
+  font-size: clamp(2.6rem, 8vw, 5.4rem);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.main-menu__subtitle {
+  margin: 0.9rem 0 2.4rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.main-menu__actions {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.main-menu__button {
+  min-height: 3.25rem;
+  border: 1px solid var(--edge);
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01));
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: border-color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.main-menu__button:hover,
+.main-menu__button:focus-visible {
+  border-color: rgba(143, 29, 36, 0.85);
+  background-color: var(--blood-dark);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.main-menu__button--primary {
+  border-color: rgba(143, 29, 36, 0.72);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent),
+    var(--blood);
+}
+
+.battle {
+  width: min(100%, 72rem);
+  padding: 1.25rem;
+  border: 1px solid var(--edge);
+  background: rgba(18, 18, 20, 0.78);
+  box-shadow: 0 1rem 2.5rem var(--shadow);
+}
+
+.battle__title,
+.battle__hand-title,
+.battle__message,
+.battle__empty {
+  margin: 0;
+}
+
+.battle__title {
+  font-size: 1.4rem;
+  text-transform: uppercase;
+}
+
+.battle__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(8rem, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.battle-stat {
+  display: grid;
+  gap: 0.25rem;
+  min-height: 4.25rem;
+  padding: 0.75rem;
+  border: 1px solid var(--edge);
+  background: rgba(7, 7, 8, 0.56);
+}
+
+.battle-stat__label {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.battle-stat__value {
+  font-size: 1.2rem;
+  text-transform: capitalize;
+}
+
+.battle__message {
+  margin-top: 1rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.battle__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.battle__button {
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid var(--edge);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.battle__button--primary {
+  border-color: rgba(143, 29, 36, 0.72);
+  background: var(--blood-dark);
+}
+
+.battle__button:disabled,
+.battle-card:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.battle__hand-title {
+  margin-top: 1.25rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.battle__hand {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.battle-card {
+  display: grid;
+  min-height: 10rem;
+  padding: 0.85rem;
+  border: 1px solid var(--edge);
+  color: var(--text);
+  background:
+    linear-gradient(180deg, rgba(143, 29, 36, 0.14), transparent 58%),
+    rgba(10, 10, 12, 0.88);
+  cursor: pointer;
+  text-align: left;
+}
+
+.battle-card__name {
+  font-size: 1rem;
+}
+
+.battle-card__description {
+  margin-top: 0.55rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.battle-card__stats {
+  align-self: end;
+  margin-top: 0.75rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--edge);
+  font-size: 0.82rem;
+}
+
+.battle__empty {
+  color: var(--muted);
+}
+
+.combat-log {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--edge);
+  background: rgba(7, 7, 8, 0.62);
+}
+
+.combat-log__title {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.combat-log__list {
+  display: grid;
+  gap: 0.45rem;
+  max-height: 14rem;
+  margin: 0.85rem 0 0;
+  padding-left: 1.25rem;
+  overflow-y: auto;
+}
+
+.combat-log__entry {
+  line-height: 1.4;
+}
+
+.card-library {
+  width: min(100%, 72rem);
+}
+
+.card-library__title {
+  margin: 0 0 1rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.card-library__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(17rem, 22rem);
+  gap: 1rem;
+  align-items: start;
+}
+
+.card-library__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.85rem;
+}
+
+.card-library__side-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  display: grid;
+  min-height: 14rem;
+  padding: 1rem;
+  border: 1px solid var(--edge);
+  color: var(--text);
+  background:
+    linear-gradient(180deg, rgba(143, 29, 36, 0.18), transparent 58%),
+    rgba(15, 15, 17, 0.88);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+.card:hover,
+.card:focus-visible,
+.card[aria-pressed="true"] {
+  border-color: rgba(143, 29, 36, 0.92);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.card__rarity,
+.card-inspector__rarity {
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.card__name {
+  margin-top: 0.35rem;
+  font-size: 1.2rem;
+}
+
+.card__description {
+  margin-top: 0.8rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.card__stats {
+  align-self: end;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--edge);
+  font-size: 0.85rem;
+}
+
+.card-inspector {
+  min-height: 14rem;
+  padding: 1.25rem;
+  border: 1px solid var(--edge);
+  background: rgba(18, 18, 20, 0.86);
+  box-shadow: 0 1rem 2.5rem var(--shadow);
+}
+
+.card-info-panel {
+  min-height: 15rem;
+  padding: 1.25rem;
+  border: 1px solid rgba(143, 29, 36, 0.48);
+  background: rgba(8, 8, 10, 0.94);
+  box-shadow: 0 1rem 2.5rem var(--shadow);
+}
+
+.card-inspector__rarity,
+.card-inspector__name,
+.card-inspector__description,
+.card-inspector__details,
+.card-info-panel__eyebrow,
+.card-info-panel__name,
+.card-info-panel__description,
+.card-info-panel__details {
+  margin: 0;
+}
+
+.card-info-panel__eyebrow {
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.card-inspector__name {
+  margin-top: 0.4rem;
+  font-size: 1.65rem;
+}
+
+.card-info-panel__name {
+  margin-top: 0.4rem;
+  font-size: 1.45rem;
+}
+
+.card-inspector__description {
+  margin-top: 1rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.card-info-panel__description {
+  margin-top: 1rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.card-inspector__details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.6rem 1rem;
+  margin-top: 1.25rem;
+}
+
+.card-info-panel__details {
+  display: grid;
+  grid-template-columns: minmax(5rem, auto) 1fr;
+  gap: 0.65rem 1rem;
+  margin-top: 1.25rem;
+}
+
+.card-inspector__details dt,
+.card-info-panel__details dt {
+  color: var(--muted);
+}
+
+.card-inspector__details dd,
+.card-info-panel__details dd {
+  margin: 0;
+}
+
+@media (max-width: 34rem) {
+  .app {
+    padding: 1rem;
+  }
+
+  .main-menu {
+    padding: 2.25rem 1.25rem;
+  }
+}
+
+@media (max-width: 48rem) {
+  .battle__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card-library__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 30rem) {
+  .battle__stats {
+    grid-template-columns: 1fr;
+  }
+}
