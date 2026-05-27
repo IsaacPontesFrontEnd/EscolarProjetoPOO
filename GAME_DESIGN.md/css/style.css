@@ -94,11 +94,411 @@ button {
     var(--blood);
 }
 
-.battle {
+.settings {
+  width: min(100%, 32rem);
+  padding: 2rem;
+  border: 1px solid var(--edge);
+  background: var(--panel);
+  box-shadow: 0 1.5rem 4rem var(--shadow);
+}
+
+.settings__title {
+  margin: 0;
+  font-size: clamp(2rem, 7vw, 4rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.settings__form {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.settings-field {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.settings-field--inline {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.settings-field__label {
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.settings-field__control {
+  min-height: 2.75rem;
+  width: 100%;
+  border: 1px solid var(--edge);
+  color: var(--text);
+  background: rgba(7, 7, 8, 0.62);
+}
+
+.settings-field select {
+  padding: 0 0.75rem;
+}
+
+.settings-field input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--blood);
+}
+
+.settings-field input[type="range"] {
+  accent-color: var(--blood);
+}
+
+.settings__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.settings__button {
+  min-height: 3rem;
+  padding: 0 1rem;
+  border: 1px solid rgba(143, 29, 36, 0.72);
+  color: var(--text);
+  background: var(--blood-dark);
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.end-screen {
+  width: min(100%, 34rem);
+  padding: 2.25rem;
+  border: 1px solid var(--edge);
+  background: var(--panel);
+  box-shadow: 0 1.5rem 4rem var(--shadow);
+  text-align: center;
+}
+
+.end-screen--victory {
+  border-color: rgba(217, 242, 159, 0.38);
+}
+
+.end-screen--defeat {
+  border-color: rgba(143, 29, 36, 0.76);
+}
+
+.end-screen__title {
+  margin: 0;
+  font-size: clamp(2.4rem, 8vw, 5rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.end-screen__text {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.end-screen__actions {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.end-screen__button {
+  min-height: 3rem;
+  border: 1px solid var(--edge);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.end-screen__button--primary {
+  border-color: rgba(143, 29, 36, 0.72);
+  background: var(--blood-dark);
+}
+
+.safe-area {
   width: min(100%, 72rem);
+}
+
+.safe-area__header {
+  padding: 1.25rem 0;
+}
+
+.safe-area__title,
+.safe-area__subtitle,
+.safe-panel__title,
+.safe-panel__heading,
+.safe-panel__text,
+.safe-panel__eyebrow {
+  margin: 0;
+}
+
+.safe-area__title {
+  font-size: clamp(2.2rem, 7vw, 4.5rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.safe-area__subtitle {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.safe-area__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(16rem, 0.65fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.safe-panel {
   padding: 1.25rem;
   border: 1px solid var(--edge);
-  background: rgba(18, 18, 20, 0.78);
+  background: rgba(18, 18, 20, 0.74);
+  box-shadow: 0 1rem 2.5rem var(--shadow);
+}
+
+.safe-panel--deck {
+  grid-row: span 3;
+}
+
+.safe-panel--transition {
+  display: grid;
+  gap: 1rem;
+}
+
+.safe-panel__title {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+
+.safe-panel__heading {
+  margin-top: 0.35rem;
+  font-size: 1.35rem;
+}
+
+.safe-panel__text {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.safe-panel__eyebrow {
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.safe-deck-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.safe-deck-card {
+  display: grid;
+  gap: 0.45rem;
+  min-height: 5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--edge);
+  color: var(--text);
+  background: rgba(7, 7, 8, 0.48);
+  cursor: pointer;
+  text-align: left;
+}
+
+.safe-deck-card:hover,
+.safe-deck-card:focus-visible {
+  border-color: rgba(143, 29, 36, 0.76);
+  outline: none;
+}
+
+.safe-deck-card__details {
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.safe-deck-inspector {
+  min-height: 9rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(143, 29, 36, 0.4);
+  background: rgba(8, 8, 10, 0.78);
+}
+
+.safe-area__button {
+  min-height: 3rem;
+  border: 1px solid rgba(143, 29, 36, 0.72);
+  color: var(--text);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent),
+    var(--blood-dark);
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.safe-area__button:hover,
+.safe-area__button:focus-visible {
+  border-color: rgba(143, 29, 36, 0.95);
+  outline: none;
+}
+
+.roguelike-map {
+  width: min(100%, 72rem);
+}
+
+.roguelike-map__header {
+  padding: 1.25rem 0;
+}
+
+.roguelike-map__title,
+.roguelike-map__subtitle,
+.map-details__type,
+.map-details__title,
+.map-details__text {
+  margin: 0;
+}
+
+.roguelike-map__title {
+  font-size: clamp(2.2rem, 7vw, 4.5rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.roguelike-map__subtitle {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.roguelike-map__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem);
+  gap: 1rem;
+  align-items: start;
+}
+
+.roguelike-map__path {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.map-node {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 5.5rem;
+  padding: 1rem;
+  border: 1px solid var(--edge);
+  color: var(--text);
+  background: rgba(18, 18, 20, 0.74);
+  cursor: pointer;
+  text-align: left;
+}
+
+.map-node:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.map-node--current {
+  border-color: rgba(143, 29, 36, 0.9);
+  background:
+    linear-gradient(180deg, rgba(143, 29, 36, 0.18), transparent),
+    rgba(18, 18, 20, 0.8);
+}
+
+.map-node--completed {
+  border-color: rgba(217, 242, 159, 0.38);
+}
+
+.map-node__type,
+.map-details__type {
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.map-node__title {
+  font-size: 1.1rem;
+}
+
+.map-details {
+  min-height: 15rem;
+  padding: 1.25rem;
+  border: 1px solid var(--edge);
+  background: rgba(7, 7, 8, 0.62);
+  box-shadow: 0 1rem 2.5rem var(--shadow);
+}
+
+.map-details__title {
+  margin-top: 0.4rem;
+  font-size: 1.55rem;
+}
+
+.map-details__text {
+  margin-top: 1rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.map-details__button,
+.shadow-map-return {
+  min-height: 3rem;
+  margin-top: 1rem;
+  padding: 0 1rem;
+  border: 1px solid rgba(143, 29, 36, 0.72);
+  color: var(--text);
+  background: var(--blood-dark);
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.map-details__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.psych-message {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  z-index: 10;
+  width: min(28rem, calc(100% - 2rem));
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(236, 231, 223, 0.14);
+  color: rgba(236, 231, 223, 0.82);
+  background: rgba(7, 7, 8, 0.88);
+  box-shadow: 0 1rem 2.5rem var(--shadow);
+  line-height: 1.4;
+  transform: translateX(-50%);
+  animation: psychMessageIn 480ms ease;
+}
+
+.psych-message--leaving {
+  opacity: 0;
+  transition: opacity 700ms ease;
+}
+
+.psych-soft-glitch {
+  animation: psychSoftGlitch 620ms ease;
+}
+
+.psych-text-shift {
+  color: rgba(236, 231, 223, 0.9);
+  animation: psychTextShift 420ms ease;
+}
+
+.battle {
+  width: min(100%, 72rem);
+  padding: 1.5rem;
+  border: 1px solid var(--edge);
+  background:
+    linear-gradient(180deg, rgba(143, 29, 36, 0.08), transparent 14rem),
+    rgba(18, 18, 20, 0.82);
   box-shadow: 0 1rem 2.5rem var(--shadow);
 }
 
@@ -110,24 +510,39 @@ button {
 }
 
 .battle__title {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   text-transform: uppercase;
 }
 
 .battle__stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(8rem, 1fr));
+  grid-template-columns: repeat(2, minmax(10rem, 1fr));
   gap: 0.75rem;
   margin-top: 1rem;
 }
 
 .battle-stat {
+  position: relative;
   display: grid;
   gap: 0.25rem;
   min-height: 4.25rem;
   padding: 0.75rem;
   border: 1px solid var(--edge);
   background: rgba(7, 7, 8, 0.56);
+  overflow: hidden;
+}
+
+.battle-stat:nth-child(1),
+.battle-stat:nth-child(2) {
+  min-height: 3.5rem;
+}
+
+.battle-stat--hit {
+  animation: hitFlash 520ms ease;
+}
+
+.battle-stat--gain {
+  animation: gainFlash 520ms ease;
 }
 
 .battle-stat__label {
@@ -139,6 +554,38 @@ button {
 .battle-stat__value {
   font-size: 1.2rem;
   text-transform: capitalize;
+}
+
+.battle-stat__bar {
+  display: block;
+  height: 0.45rem;
+  margin-top: 0.35rem;
+  overflow: hidden;
+  background: rgba(236, 231, 223, 0.1);
+}
+
+.battle-stat__bar-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--blood), #c84b54);
+}
+
+.feedback-number {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.55rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  pointer-events: none;
+  animation: numberFloat 900ms ease forwards;
+}
+
+.feedback-number--damage {
+  color: #ff6a6a;
+}
+
+.feedback-number--gain {
+  color: #d9f29f;
 }
 
 .battle__message {
@@ -189,6 +636,10 @@ button {
   margin-top: 0.75rem;
 }
 
+.battle__hand--placement .battle-card {
+  animation: cardPlacement 420ms ease;
+}
+
 .battle-card {
   display: grid;
   min-height: 10rem;
@@ -222,6 +673,44 @@ button {
 
 .battle__empty {
   color: var(--muted);
+}
+
+.battle-played-card {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 5rem;
+  margin-top: 1rem;
+  padding: 0.85rem;
+  border: 1px solid var(--edge);
+  background: rgba(7, 7, 8, 0.48);
+  color: var(--muted);
+}
+
+.deck-drawer {
+  width: min(100%, 72rem);
+}
+
+.deck-drawer[hidden] {
+  display: none;
+}
+
+.battle-played-card--affected {
+  border-color: rgba(143, 29, 36, 0.92);
+  animation: cardAffected 700ms ease;
+}
+
+.battle-played-card__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.battle-played-card__name {
+  color: var(--text);
+  font-size: 1.05rem;
+}
+
+.battle-played-card__text {
+  line-height: 1.35;
 }
 
 .combat-log {
@@ -419,7 +908,19 @@ button {
 
 @media (max-width: 48rem) {
   .battle__stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
+  }
+
+  .safe-area__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .roguelike-map__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .safe-panel--deck {
+    grid-row: auto;
   }
 
   .card-library__layout {
@@ -430,5 +931,142 @@ button {
 @media (max-width: 30rem) {
   .battle__stats {
     grid-template-columns: 1fr;
+  }
+}
+
+@keyframes numberFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.96);
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-1.75rem) scale(1.08);
+  }
+}
+
+@keyframes hitFlash {
+  0%,
+  100% {
+    background-color: rgba(7, 7, 8, 0.56);
+  }
+
+  35% {
+    background-color: rgba(143, 29, 36, 0.42);
+  }
+}
+
+@keyframes gainFlash {
+  0%,
+  100% {
+    background-color: rgba(7, 7, 8, 0.56);
+  }
+
+  35% {
+    background-color: rgba(129, 143, 29, 0.26);
+  }
+}
+
+@keyframes attackPlayer {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 64%;
+    opacity: 0;
+  }
+}
+
+@keyframes attackEnemy {
+  0% {
+    right: 0;
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  100% {
+    right: 64%;
+    opacity: 0;
+  }
+}
+
+@keyframes cardPlacement {
+  0% {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardAffected {
+  0% {
+    transform: scale(0.98);
+  }
+
+  45% {
+    transform: scale(1.01);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes psychMessageIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0.35rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes psychSoftGlitch {
+  0%,
+  100% {
+    filter: none;
+    transform: translateX(0);
+  }
+
+  28% {
+    filter: contrast(1.08);
+    transform: translateX(1px);
+  }
+
+  42% {
+    filter: brightness(0.94);
+    transform: translateX(-1px);
+  }
+}
+
+@keyframes psychTextShift {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  45% {
+    opacity: 0.58;
   }
 }

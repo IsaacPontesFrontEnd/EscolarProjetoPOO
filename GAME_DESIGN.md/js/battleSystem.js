@@ -7,6 +7,10 @@ function addCombatLog(battleState, text) {
   battleState.combatLog.push(text);
 }
 
+export function queueVisualEvent(battleState, event) {
+  battleState.visualEvents.push(event);
+}
+
 function createDeck(cards) {
   return [...cards];
 }
@@ -31,11 +35,14 @@ export function createBattleState(cards) {
     hand: [],
     discard: [],
     combatLog: [],
+    visualEvents: [],
+    lastPlayedCard: null,
     message: "Player turn. Play a card or end the turn."
   };
 
   addCombatLog(battleState, "Turn 1 started.");
   addCombatLog(battleState, "Player gained 1 blood.");
+  queueVisualEvent(battleState, { type: "resource", target: "resources", amount: 1 });
   drawCards(battleState, STARTING_HAND_SIZE);
   return battleState;
 }
@@ -68,10 +75,15 @@ export function playCard(battleState, cardIndex) {
   battleState.resources -= card.cost;
   battleState.enemyHp = Math.max(0, battleState.enemyHp - card.attack);
   battleState.discard.push(card);
+  battleState.lastPlayedCard = card;
   battleState.message = `${card.name} dealt ${card.attack} damage.`;
   addCombatLog(battleState, `${card.name} was played.`);
   addCombatLog(battleState, `${card.name} dealt ${card.attack} damage.`);
   addCombatLog(battleState, `${card.name} was destroyed.`);
+  queueVisualEvent(battleState, { type: "card-played", cardId: card.id });
+  queueVisualEvent(battleState, { type: "attack", source: "player", target: "enemy" });
+  queueVisualEvent(battleState, { type: "damage", target: "enemy", amount: card.attack });
+  queueVisualEvent(battleState, { type: "card-destroyed", cardId: card.id });
 
   if (battleState.enemyHp === 0) {
     battleState.message = "Enemy defeated.";
@@ -98,6 +110,8 @@ export function resolveEnemyTurn(battleState) {
   battleState.playerHp = Math.max(0, battleState.playerHp - ENEMY_ATTACK);
   battleState.message = `Enemy dealt ${ENEMY_ATTACK} damage.`;
   addCombatLog(battleState, `Enemy NPC dealt ${ENEMY_ATTACK} damage.`);
+  queueVisualEvent(battleState, { type: "attack", source: "enemy", target: "player" });
+  queueVisualEvent(battleState, { type: "damage", target: "player", amount: ENEMY_ATTACK });
 
   if (battleState.playerHp === 0) {
     battleState.message = "Player defeated.";
@@ -114,6 +128,7 @@ export function resolveEnemyTurn(battleState) {
   battleState.resources = battleState.maxResources;
   if (battleState.maxResources > previousMaxResources) {
     addCombatLog(battleState, "Player gained 1 blood.");
+    queueVisualEvent(battleState, { type: "resource", target: "resources", amount: 1 });
   }
   drawCards(battleState, 1);
 }

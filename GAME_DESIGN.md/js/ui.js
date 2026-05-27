@@ -1,10 +1,13 @@
+import { translate } from "./i18n.js";
+
 const menuItems = [
-  { id: "new-game", label: "New Game", primary: true },
-  { id: "continue", label: "Continue" },
-  { id: "settings", label: "Settings" }
+  { id: "new-game", labelKey: "newGame", primary: true },
+  { id: "continue", labelKey: "continue" },
+  { id: "settings", labelKey: "settings" }
 ];
 
-export function renderMainMenu(root, actionMap = {}) {
+export function renderMainMenu(root, actionMap = {}, language = "en") {
+  const t = (key) => translate(language, key);
   const menu = document.createElement("section");
   menu.className = "main-menu";
 
@@ -14,7 +17,7 @@ export function renderMainMenu(root, actionMap = {}) {
 
   const subtitle = document.createElement("p");
   subtitle.className = "main-menu__subtitle";
-  subtitle.textContent = "Main Menu";
+  subtitle.textContent = t("mainMenu");
 
   const actionList = document.createElement("div");
   actionList.className = "main-menu__actions";
@@ -26,7 +29,7 @@ export function renderMainMenu(root, actionMap = {}) {
       : "main-menu__button";
     button.type = "button";
     button.dataset.action = item.id;
-    button.textContent = item.label;
+    button.textContent = t(item.labelKey);
     actionList.append(button);
   });
 
