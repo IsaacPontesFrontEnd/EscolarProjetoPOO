@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Jogo da Senha</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body class="dark">
+
+<header>
+
+    <h1>🔐 Descubra a Senha</h1>
+
+    <button id="tema">🌙 Tema</button>
+
+</header>
+
+<div class="container">
+
+    <main>
+
+        <div class="configuracao" id="configuracao">
+
+            <input
+                type="password"
+                id="senha-secreta"
+                maxlength="4000"
+                placeholder="Escolha a senha da partida">
+
+            <input
+                type="number"
+                id="tamanho-senha"
+                min="1"
+                max="4000"
+                value="5">
+
+            <button onclick="iniciarComSenha()">
+                Iniciar
+            </button>
+
+            <button onclick="gerarSenha()">
+                Gerar senha
+            </button>
+
+        </div>
+
+        <div class="entrada">
+
+            <input
+                type="text"
+                id="senha"
+                maxlength="4000"
+                disabled
+                placeholder="Digite sua tentativa">
+
+            <button onclick="verificar()">
+                Tentar
+            </button>
+
+            <button onclick="darDica()">
+                💡 Dica
+            </button>
+
+            <button onclick="terminar()">
+                🏳 Terminar
+            </button>
+
+        </div>
+
+        <div id="mensagem">
+
+            Bem-vindo ao jogo!
+
+        </div>
+
+        <div class="informacoes">
+
+            <p>
+                Tentativas:
+                <span id="tentativas">0</span>
+            </p>
+
+            <p>
+                Dicas usadas:
+                <span id="dicas">0</span>
+            </p>
+
+        </div>
+
+        <h2>Histórico</h2>
+
+        <div id="historico"></div>
+
+    </main>
+
+    <aside>
+
+        <h2>Legenda</h2>
+
+        <p>🟢 <b>Correto</b></p>
+
+        <p>🟡 <b>Existe na senha</b></p>
+
+        <p>🔵 <b>Maiúsc./Minúsc. diferente</b></p>
+
+        <p>❌ <b>Não existe</b></p>
+
+    </aside>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
