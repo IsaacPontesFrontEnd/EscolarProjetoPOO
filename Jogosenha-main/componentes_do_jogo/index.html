@@ -1,121 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-
 <head>
-
-    <meta charset="UTF-8">
-    <title>Jogo da Senha</title>
-
-    <link rel="stylesheet" href="style.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>Descubra a Senha</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
-<body class="dark">
-
-<header>
-
-    <h1>🔐 Descubra a Senha</h1>
-
-    <button id="tema">🌙 Tema</button>
-
-</header>
-
-<div class="container">
-
-    <main>
-
-        <div class="configuracao" id="configuracao">
-
-            <input
-                type="password"
-                id="senha-secreta"
-                maxlength="4000"
-                placeholder="Escolha a senha da partida">
-
-            <input
-                type="number"
-                id="tamanho-senha"
-                min="1"
-                max="4000"
-                value="5">
-
-            <button onclick="iniciarComSenha()">
-                Iniciar
-            </button>
-
-            <button onclick="gerarSenha()">
-                Gerar senha
-            </button>
-
-        </div>
-
-        <div class="entrada">
-
-            <input
-                type="text"
-                id="senha"
-                maxlength="4000"
-                disabled
-                placeholder="Digite sua tentativa">
-
-            <button onclick="verificar()">
-                Tentar
-            </button>
-
-            <button onclick="darDica()">
-                💡 Dica
-            </button>
-
-            <button onclick="terminar()">
-                🏳 Terminar
-            </button>
-
-        </div>
-
-        <div id="mensagem">
-
-            Bem-vindo ao jogo!
-
-        </div>
-
-        <div class="informacoes">
-
-            <p>
-                Tentativas:
-                <span id="tentativas">0</span>
-            </p>
-
-            <p>
-                Dicas usadas:
-                <span id="dicas">0</span>
-            </p>
-
-        </div>
-
-        <h2>Histórico</h2>
-
-        <div id="historico"></div>
-
-    </main>
-
-    <aside>
-
-        <h2>Legenda</h2>
-
-        <p>🟢 <b>Correto</b></p>
-
-        <p>🟡 <b>Existe na senha</b></p>
-
-        <p>🔵 <b>Maiúsc./Minúsc. diferente</b></p>
-
-        <p>❌ <b>Não existe</b></p>
-
-    </aside>
-
-</div>
-
-<script src="script.js"></script>
-
+<body>
+  <header class="topbar">
+    <div><p class="eyebrow">JOGO DE LÓGICA</p><h1>🔐 Descubra a Senha</h1></div>
+    <button id="tema" class="button button-quiet" type="button" aria-label="Alternar tema">🌙 Tema</button>
+  </header>
+  <main class="layout">
+    <section class="game panel" aria-labelledby="game-title">
+      <div class="section-heading"><div><p class="eyebrow">SUA PARTIDA</p><h2 id="game-title">Configuração</h2></div><button id="nova-partida" class="button button-quiet" type="button" hidden>↻ Nova partida</button></div>
+      <div id="configuracao" class="setup">
+        <label>Modo de jogo<select id="modo"><option value="dupla">Dois jogadores</option><option value="solo">Contra o computador</option></select></label>
+        <label>Senha secreta (1 a 4000 caracteres)<input type="password" id="senha-secreta" maxlength="4000" autocomplete="new-password" placeholder="Escolha uma senha"></label>
+        <div class="form-row"><label>Tamanho da senha<input type="number" id="tamanho-senha" min="1" max="4000" value="5" inputmode="numeric"></label><label>Limite de tentativas<select id="limite"><option value="0">Sem limite</option><option value="5">5 tentativas</option><option value="10">10 tentativas</option><option value="15">15 tentativas</option></select></label></div>
+        <fieldset><legend>Caracteres do gerador</legend><label class="check"><input type="checkbox" id="gen-maiusculas" checked> Maiúsculas</label><label class="check"><input type="checkbox" id="gen-minusculas" checked> Minúsculas</label><label class="check"><input type="checkbox" id="gen-numeros" checked> Números</label><label class="check"><input type="checkbox" id="gen-simbolos" checked> Símbolos</label></fieldset>
+        <div class="actions"><button id="iniciar" class="button button-primary" type="button">Iniciar com esta senha</button><button id="gerar" class="button" type="button">Gerar senha e iniciar</button></div>
+        <p class="hint">No modo contra o computador, a senha fica oculta e é gerada automaticamente.</p>
+      </div>
+      <div class="play-area">
+        <div class="guess-row"><label for="senha">Sua tentativa</label><div class="guess-controls"><input type="text" id="senha" maxlength="4000" disabled autocomplete="off" placeholder="Digite sua tentativa"><button id="tentar" class="button button-primary" type="button" disabled>Tentar</button></div></div>
+        <div class="actions play-actions"><button id="dica" class="button" type="button" disabled>💡 Pedir dica</button><button id="terminar" class="button button-danger" type="button" disabled>Desistir</button></div>
+      </div>
+      <div id="mensagem" class="message" role="status" aria-live="polite">Configure uma partida para começar.</div>
+      <div class="stats" aria-label="Informações da partida"><div><span>Tentativas</span><strong id="tentativas">0</strong></div><div><span>Dicas usadas</span><strong id="dicas">0</strong></div><div><span>Comprimento</span><strong id="comprimento">—</strong></div><div><span>Restantes</span><strong id="restantes">∞</strong></div></div>
+      <section class="history-section" aria-labelledby="history-title"><div class="section-heading"><h2 id="history-title">Histórico</h2><span id="historico-total" class="hint"></span></div><div id="historico" aria-live="polite"></div><div class="pagination"><button id="pagina-anterior" class="button button-quiet" type="button" disabled>← Anterior</button><span id="pagina-info" aria-live="polite"></span><button id="pagina-proxima" class="button button-quiet" type="button" disabled>Próxima →</button></div></section>
+    </section>
+    <aside class="panel legend"><p class="eyebrow">COMO LER AS PISTAS</p><h2>Legenda</h2><ul><li><span class="swatch green"></span><span><b>Verde</b><small>Caractere e posição corretos</small></span></li><li><span class="swatch yellow"></span><span><b>Amarelo</b><small>Existe em outra posição</small></span></li><li><span class="swatch blue"></span><span><b>Azul</b><small>Mesma letra, caixa diferente</small></span></li><li><span class="swatch red"></span><span><b>Vermelho</b><small>Não existe ou não há ocorrência disponível</small></span></li></ul><p class="hint">As correspondências exatas têm prioridade. Cada ocorrência da senha só pode ser usada uma vez nas pistas.</p></aside>
+  </main>
+  <script src="script.js"></script>
 </body>
-
 </html>
